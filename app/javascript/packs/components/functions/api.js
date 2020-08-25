@@ -6,9 +6,9 @@ const ENDPOINT = 'https://api-sandbox.coingate.com/v2/orders';
 export const submitOrder = async (data) => {
 	const body = new URLSearchParams();
 
-	dt.append('price_amount', data.amount);
-	dt.append('price_currency', data.currency);
-	dt.append('receive_currency', 'EUR');
+	body.append('price_amount', data.amount);
+	body.append('price_currency', data.currency);
+	body.append('receive_currency', 'EUR');
 
 	fetch(`${CORS}/${ENDPOINT}`, {
 		body,

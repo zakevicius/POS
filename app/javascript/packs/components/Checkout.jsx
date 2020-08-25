@@ -1,12 +1,13 @@
-import React from "react";
+import React from 'react';
+import { getOrders } from './functions/api';
 
 const Checkout = ({
-  location: {
-    state: { order },
-  },
+	location: {
+		state: { order }
+	}
 }) => {
-  console.log(order);
-  return <div> Checkout </div>;
+	getOrders();
+	return <div> Checkout </div>;
 };
 
 export default Checkout;

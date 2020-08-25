@@ -1,141 +1,164 @@
 * {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+	font-family: Montserrat;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
 }
 
 body {
-  height: 100vh;
-  min-height: 100%;
-  background: rgb(250, 250, 250);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	height: 100vh;
+	min-height: 100%;
+	background: rgb(250, 250, 250);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 table {
-  width: 600px;
-  border-spacing: 0;
-  table-layout: fixed;
+	width: 600px;
+	border-spacing: 0px;
+	table-layout: fixed;
+	color: #eaedf0;
 }
 
 tr {
-  height: 75px;
-  background: #fff;
-}
+	height: 75px;
+	background: #fff;
 
-tr:first-child td:first-child {
-  border-radius: 5px 5px 0 0;
-  -webkit-border-radius: 5px 5px 0 0;
-  -moz-border-radius: 5px 5px 0 0;
-  -ms-border-radius: 5px 5px 0 0;
-  -o-border-radius: 5px 5px 0 0;
-}
+	&:first-child td:first-child {
+		border-radius: 15px 15px 0 0;
+		-webkit-border-radius: 15px 15px 0 0;
+		-moz-border-radius: 15px 15px 0 0;
+		-ms-border-radius: 15px 15px 0 0;
+		-o-border-radius: 15px 15px 0 0;
+	}
 
-tr:last-child td:first-child {
-  border-radius: 0 0 5px 5px;
-  -webkit-border-radius: 0 0 5px 5px;
-  -moz-border-radius: 0 0 5px 5px;
-  -ms-border-radius: 0 0 5px 5px;
-  -o-border-radius: 0 0 5px 5px;
-}
+	&:last-child td:first-child {
+		border-radius: 0 0 15px 15px;
+		-webkit-border-radius: 0 0 15px 15px;
+		-moz-border-radius: 0 0 15px 15px;
+		-ms-border-radius: 0 0 15px 15px;
+		-o-border-radius: 0 0 15px 15px;
+	}
 
-tr:nth-child(1),
-tr:nth-child(2),
-tr:last-child {
-  height: 50px;
-  background: #6d4879;
-  color: white;
-}
+	&:nth-child(1),
+	&:nth-child(2),
+	&:last-child {
+		height: 50px;
+	}
 
-td {
-  position: relative;
-  border: 1px solid #97335b;
-  font-size: 14pt;
-  text-align: center;
-  user-select: none;
-  transition: background 0.1s;
-  -webkit-transition: background 0.1s;
-  -moz-transition: background 0.1s;
-  -ms-transition: background 0.1s;
-  -o-transition: background 0.1s;
-}
+	&#error {
+		border: none;
+	}
 
-td.number:hover {
-  cursor: pointer;
-  background: #f9e8ff;
-}
+	td {
+		background: #5b6a7d;
+		position: relative;
+		border: 1px solid #eaedf0;
+		font-size: 14pt;
+		text-align: center;
+		user-select: none;
+		transition: background 0.1s;
+		-webkit-transition: background 0.1s;
+		-moz-transition: background 0.1s;
+		-ms-transition: background 0.1s;
+		-o-transition: background 0.1s;
 
-tr:not(:last-child) td {
-  border-bottom: none;
-}
+		&.number {
+			font-size: 12pt;
+			color: #f0c0cd;
+		}
 
-td:not(:last-child) {
-  border-right: none;
+		&.number:hover {
+			cursor: pointer;
+			background: #333a42;
+		}
+
+		&:not(:last-child) {
+			border-right: none;
+		}
+
+		&#title,
+		&#submit:hover {
+			background: #363e49;
+		}
+
+		&#value,
+		&#submit {
+			background: #505c68;
+		}
+	}
+
+	&:not(:last-child) td {
+		border-bottom: 0;
+	}
 }
 
 #error {
-  height: 0px;
-  color: tomato;
-  transition: height 0.05s;
-  -webkit-transition: height 0.05s;
-  -moz-transition: height 0.05s;
-  -ms-transition: height 0.05s;
-  -o-transition: height 0.05s;
+	height: 0px;
+	transition: height 0.1s;
+	-webkit-transition: height 0.1s;
+	-moz-transition: height 0.1s;
+	-ms-transition: height 0.1s;
+	-o-transition: height 0.1s;
+
+	td {
+		background: #ffffff;
+		color: #f0c0cd;
+	}
 }
 
 #error.active {
-  height: 50px;
+	height: 50px;
 }
 
 .btn-confirm:hover {
-  cursor: pointer;
-  background: #333;
+	cursor: pointer;
+	background: #333;
 }
 
 .clicked {
-  animation: click 0.1s linear;
-  -webkit-animation: click 0.1s linear;
+	animation: click 0.1s linear;
+	-webkit-animation: click 0.1s linear;
 }
 
 .shake {
-  animation: shake 0.1s linear;
-  animation-iteration-count: infinite;
-  -webkit-animation: shake 0.1s linear;
+	animation: shake 0.1s linear;
+	animation-iteration-count: infinite;
+	-webkit-animation: shake 0.1s linear;
 }
 
 @keyframes shake {
-  0% {
-    left: 0;
-  }
+	0% {
+		left: 0;
+	}
 
-  33% {
-    left: -3px;
-  }
+	33% {
+		left: -3px;
+	}
 
-  66% {
-    left: 3px;
-  }
+	66% {
+		left: 3px;
+	}
 
-  100% {
-    left: 0;
-  }
+	100% {
+		left: 0;
+	}
 }
 
 @keyframes click {
-  0% {
-    box-shadow: none;
-    opacity: 1;
-  }
+	0% {
+		box-shadow: none;
+		opacity: 1;
+	}
 
-  50% {
-    box-shadow: inset 0px 0px 1px 1px f9e8ff;
-    opacity: 0.7;
-  }
+	50% {
+		box-shadow: inset 0px 0px 1px 1px #333a42;
+		opacity: 0.9;
+	}
 
-  100% {
-    box-shadow: none;
-    opacity: 1;
-  }
+	100% {
+		box-shadow: none;
+		opacity: 1;
+	}
 }

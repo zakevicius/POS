@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { getExchangeRates } from '../functions/api';
 import Selection from './Selection';
 
-// {
-//   location: {
-//     state: { order },
-//   },
-// }
-
-const Checkout = ({ order = { id: 123 } }) => {
+const Checkout = ({
+  location: {
+    state: { order = { id: 123, price_amount: 123, price_currency: 'EUR' } },
+  },
+}) => {
   const [rates, setRates] = useState({
     BTC: {
       name: 'Bitcoin',
@@ -27,11 +25,12 @@ const Checkout = ({ order = { id: 123 } }) => {
     },
   });
   const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // setLoading(true);
-    // fetchRates();
+    setLoading(true);
+    // setLoading(false);
+    fetchRates();
   }, [order.id]);
 
   const fetchRates = async () => {
@@ -41,42 +40,53 @@ const Checkout = ({ order = { id: 123 } }) => {
         ...rates,
         BTC: {
           ...rates.BTC,
-          rate: BTCr,
+          rate: +BTCr,
         },
         LTC: {
           ...rates.LTC,
-          rate: LTCr,
+          rate: +LTCr,
         },
         BCH: {
           ...rates.BCH,
-          rate: BCHr,
+          rate: +BCHr,
         },
       });
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       setError('Could not get exchange rates. Please try again later');
     }
-    setLoading(false);
   };
 
   const renderSelections = () => {
-    rates.map((rate) => <Selection data={rate} />);
+    console.log(rates);
+    let data = [];
+    for (let key in rates) {
+      data.push(
+        <Selection
+          key={key}
+          data={{ rates: rates[key], amount: order.price_amount }}
+        />
+      );
+    }
+    return data;
   };
 
   if (loading) return <div>Loading</div>;
 
   return (
     <div id="checkout">
-      <div class="info">
+      <div className="info">
         <span>Simple</span>
-        <span>0.21 EUR</span>
+        <span>{`${order.price_amount} ${order.price_currency}`}</span>
       </div>
-      <div class="currency">
+      <div className="currency">
         <h2>Select payment currency</h2>
-        {renderSelections()}
+        {loading ? <div>Loading</div> : renderSelections()}
       </div>
-      <div class="buttons">
-        <div class="btn btn-confirm disabled">Pay</div>
-        <div class="btn btn-cancel">Cancel</div>
+      <div className="buttons">
+        <div className="btn btn-confirm disabled">Pay</div>
+        <div className="btn btn-cancel">Cancel</div>
       </div>
     </div>
   );

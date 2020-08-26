@@ -42,9 +42,11 @@ const PointOfSale = () => {
     }
 
     try {
-      setAmount(updateAmount(value) || amount);
+      let newAmount = updateAmount(value);
+      if (newAmount instanceof Error) throw newAmount;
+      setAmount(newAmount);
     } catch (err) {
-      setError(err.msg);
+      setError(err.message);
     }
   };
 

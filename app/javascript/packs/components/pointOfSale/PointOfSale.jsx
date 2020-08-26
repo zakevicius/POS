@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import CellButton from './CellButton';
 import Row from './Row';
-import { click, shake, updateAmount, reset } from './functions/actions';
-import { submitOrder } from './functions/api';
+import { click, shake, updateAmount, reset } from '../functions/actions';
+import { submitOrder } from '../functions/api';
 
 const PointOfSale = () => {
   //History

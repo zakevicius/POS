@@ -1,164 +1,172 @@
+$clr-error: #ec7c9a;
+$clr-bg: #fbfbfb;
+$clr-dark: #505c68;
+$clr-darker: #333a42;
+$clr-medium: #5b6a7d;
+$clr-pink: #f0c0cd;
+$clr-lightgrey: #eaedf0;
+
 * {
-	font-family: Montserrat;
-	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
+  font-family: Montserrat;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
-	height: 100vh;
-	min-height: 100%;
-	background: rgb(250, 250, 250);
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  height: 100vh;
+  min-height: 100%;
+  background: $clr-bg;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 table {
-	width: 600px;
-	border-spacing: 0px;
-	table-layout: fixed;
-	color: #eaedf0;
+  width: 600px;
+  border-spacing: 0px;
+  table-layout: fixed;
+  color: $clr-lightgrey;
 }
 
 tr {
-	height: 75px;
-	background: #fff;
+  height: 75px;
+  // background: #fff;
 
-	&:first-child td:first-child {
-		border-radius: 15px 15px 0 0;
-		-webkit-border-radius: 15px 15px 0 0;
-		-moz-border-radius: 15px 15px 0 0;
-		-ms-border-radius: 15px 15px 0 0;
-		-o-border-radius: 15px 15px 0 0;
-	}
+  &:first-child td:first-child {
+    border-radius: 15px 15px 0 0;
+    -webkit-border-radius: 15px 15px 0 0;
+    -moz-border-radius: 15px 15px 0 0;
+    -ms-border-radius: 15px 15px 0 0;
+    -o-border-radius: 15px 15px 0 0;
+  }
 
-	&:last-child td:first-child {
-		border-radius: 0 0 15px 15px;
-		-webkit-border-radius: 0 0 15px 15px;
-		-moz-border-radius: 0 0 15px 15px;
-		-ms-border-radius: 0 0 15px 15px;
-		-o-border-radius: 0 0 15px 15px;
-	}
+  &:last-child td:first-child {
+    border-radius: 0 0 15px 15px;
+    -webkit-border-radius: 0 0 15px 15px;
+    -moz-border-radius: 0 0 15px 15px;
+    -ms-border-radius: 0 0 15px 15px;
+    -o-border-radius: 0 0 15px 15px;
+  }
 
-	&:nth-child(1),
-	&:nth-child(2),
-	&:last-child {
-		height: 50px;
-	}
+  &:nth-child(1),
+  &:nth-child(2),
+  &:last-child {
+    height: 50px;
+  }
 
-	&#error {
-		border: none;
-	}
+  &#error {
+    border: none;
+  }
 
-	td {
-		background: #5b6a7d;
-		position: relative;
-		border: 1px solid #eaedf0;
-		font-size: 14pt;
-		text-align: center;
-		user-select: none;
-		transition: background 0.1s;
-		-webkit-transition: background 0.1s;
-		-moz-transition: background 0.1s;
-		-ms-transition: background 0.1s;
-		-o-transition: background 0.1s;
+  td {
+    background: $clr-medium;
+    position: relative;
+    border: 1px solid $clr-lightgrey;
+    font-size: 14pt;
+    text-align: center;
+    user-select: none;
+    transition: background 0.1s;
+    -webkit-transition: background 0.1s;
+    -moz-transition: background 0.1s;
+    -ms-transition: background 0.1s;
+    -o-transition: background 0.1s;
 
-		&.number {
-			font-size: 12pt;
-			color: #f0c0cd;
-		}
+    &.number {
+      font-size: 12pt;
+      color: $clr-pink;
+    }
 
-		&.number:hover {
-			cursor: pointer;
-			background: #333a42;
-		}
+    &.number:hover {
+      cursor: pointer;
+      background: $clr-darker;
+    }
 
-		&:not(:last-child) {
-			border-right: none;
-		}
+    &:not(:last-child) {
+      border-right: none;
+    }
 
-		&#title,
-		&#submit:hover {
-			background: #363e49;
-		}
+    &#title,
+    &#submit:hover {
+      background: $clr-darker;
+    }
 
-		&#value,
-		&#submit {
-			background: #505c68;
-		}
-	}
+    &#value,
+    &#submit {
+      background: $clr-dark;
+    }
+  }
 
-	&:not(:last-child) td {
-		border-bottom: 0;
-	}
+  &:not(:last-child) td {
+    border-bottom: 0;
+  }
 }
 
 #error {
-	height: 0px;
-	transition: height 0.1s;
-	-webkit-transition: height 0.1s;
-	-moz-transition: height 0.1s;
-	-ms-transition: height 0.1s;
-	-o-transition: height 0.1s;
+  height: 0px;
+  transition: height 0.1s;
+  -webkit-transition: height 0.1s;
+  -moz-transition: height 0.1s;
+  -ms-transition: height 0.1s;
+  -o-transition: height 0.1s;
 
-	td {
-		background: #ffffff;
-		color: #f0c0cd;
-	}
+  td {
+    background: #fff;
+    color: $clr-error;
+  }
 }
 
 #error.active {
-	height: 50px;
+  height: 50px;
 }
 
 .btn-confirm:hover {
-	cursor: pointer;
-	background: #333;
+  cursor: pointer;
+  background: $clr-darker;
 }
 
 .clicked {
-	animation: click 0.1s linear;
-	-webkit-animation: click 0.1s linear;
+  animation: click 0.1s linear;
+  -webkit-animation: click 0.1s linear;
 }
 
 .shake {
-	animation: shake 0.1s linear;
-	animation-iteration-count: infinite;
-	-webkit-animation: shake 0.1s linear;
+  animation: shake 0.1s linear;
+  animation-iteration-count: infinite;
+  -webkit-animation: shake 0.1s linear;
 }
 
 @keyframes shake {
-	0% {
-		left: 0;
-	}
+  0% {
+    left: 0;
+  }
 
-	33% {
-		left: -3px;
-	}
+  33% {
+    left: -3px;
+  }
 
-	66% {
-		left: 3px;
-	}
+  66% {
+    left: 3px;
+  }
 
-	100% {
-		left: 0;
-	}
+  100% {
+    left: 0;
+  }
 }
 
 @keyframes click {
-	0% {
-		box-shadow: none;
-		opacity: 1;
-	}
+  0% {
+    box-shadow: none;
+    opacity: 1;
+  }
 
-	50% {
-		box-shadow: inset 0px 0px 1px 1px #333a42;
-		opacity: 0.9;
-	}
+  50% {
+    box-shadow: inset 0px 0px 1px 1px #333a42;
+    opacity: 0.9;
+  }
 
-	100% {
-		box-shadow: none;
-		opacity: 1;
-	}
+  100% {
+    box-shadow: none;
+    opacity: 1;
+  }
 }

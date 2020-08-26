@@ -1,37 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { getExchangeRates } from '../functions/api';
 import Selection from './Selection';
+import { getExchangeRates } from '../functions/api';
+import { click } from '../functions/actions';
 
+// const Checkout = ({
+//   location: {
+//     state: { order = { id: 123, price_amount: 123, price_currency: 'EUR' } },
+//   },
+// }) => {
 const Checkout = ({
-  location: {
-    state: { order = { id: 123, price_amount: 123, price_currency: 'EUR' } },
-  },
+  order = { id: 123, price_amount: 123, price_currency: 'EUR' },
 }) => {
   const [rates, setRates] = useState({
     BTC: {
       name: 'Bitcoin',
-      rate: 'fetching',
+      rate: '',
       short: 'BTC',
     },
     LTC: {
       name: 'Litecoin',
-      rate: 'fetching',
+      rate: '',
       short: 'LTC',
     },
     BCH: {
       name: 'Bitcoin Cash',
-      rate: 'fetching',
+      rate: '',
       short: 'BCH',
     },
   });
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState();
 
   useEffect(() => {
-    setLoading(true);
-    // setLoading(false);
-    fetchRates();
-  }, [order.id]);
+    // setLoading(true);
+    // setTimeout(() => {
+    setLoading(false);
+    // }, 1500);
+    // fetchRates();
+  }, [order.id, order.amount]);
 
   const fetchRates = async () => {
     try {
@@ -58,21 +65,41 @@ const Checkout = ({
     }
   };
 
+  const handleSelection = (e) => {
+    const el = e.target.closest('.selection');
+    setError();
+    setSelected(el.dataset.value);
+    setTimeout(() => {
+      click(el);
+    }, 1);
+  };
+
+  const handleSubmit = (e) => {
+    if (!selected || e.target.classList.contains('disabled')) {
+      setError('Select currency for payment');
+    } else {
+      console.log(selected);
+      console.log('submitting ccheckout');
+    }
+  };
+
   const renderSelections = () => {
-    console.log(rates);
     let data = [];
     for (let key in rates) {
       data.push(
         <Selection
           key={key}
-          data={{ rates: rates[key], amount: order.price_amount }}
+          data={{
+            info: rates[key],
+            amount: order.price_amount,
+            selected,
+          }}
+          onSelection={handleSelection}
         />
       );
     }
     return data;
   };
-
-  if (loading) return <div>Loading</div>;
 
   return (
     <div id="checkout">
@@ -82,10 +109,18 @@ const Checkout = ({
       </div>
       <div className="currency">
         <h2>Select payment currency</h2>
-        {loading ? <div>Loading</div> : renderSelections()}
+        {loading ? <div id="loading">Loading</div> : renderSelections()}
+      </div>
+      <div id="error" className={error ? 'active' : ''}>
+        {error}
       </div>
       <div className="buttons">
-        <div className="btn btn-confirm disabled">Pay</div>
+        <div
+          className={`btn btn-confirm ${selected ? '' : 'disabled'}`}
+          onClick={handleSubmit}
+        >
+          Pay {selected ? `with ${rates[selected].name}` : ''}
+        </div>
         <div className="btn btn-cancel">Cancel</div>
       </div>
     </div>

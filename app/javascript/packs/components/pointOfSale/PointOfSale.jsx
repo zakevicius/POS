@@ -55,8 +55,8 @@ const PointOfSale = () => {
       setError('Enter amount');
       shake(amountDislpay.current);
     } else {
-      let order;
       if (error) setError();
+      let order;
       setLoading(true);
       try {
         order = await submitOrder({ amount, currency: CURRENCY });

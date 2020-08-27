@@ -68,6 +68,7 @@ const Checkout = (props) => {
 
   const handleSelection = (e) => {
     const el = e.target.closest('.selection');
+
     setError();
     setSelected(el.dataset.value);
     setTimeout(() => {
@@ -91,6 +92,9 @@ const Checkout = (props) => {
         });
 
         setLoading(false);
+
+        if (res instanceof Error) throw res;
+
         if (res.status) {
           history.push({
             pathname: '/',

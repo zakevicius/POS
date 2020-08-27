@@ -13,6 +13,7 @@ export const updateAmount = (value) => {
     default:
       amountArr.push(value);
   }
+
   let amount = getAmount(amountArr);
 
   if (amount > MAX_LIMIT) {
@@ -26,6 +27,7 @@ export const updateAmount = (value) => {
 
 const getAmount = (arr) => {
   let amount = 0;
+
   for (let j = 0; j < arr.length; j++) {
     let multiplyBy = exactMath.pow(10, arr.length - j - 1);
     amount = exactMath.add(amount, exactMath.mul(arr[j], multiplyBy) / 100);

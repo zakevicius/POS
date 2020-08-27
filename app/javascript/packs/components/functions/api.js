@@ -22,7 +22,9 @@ export const submitOrder = async (data) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
+
     if (response.status === 200) return response.json();
+
     throw new Error('Could not create new order');
   } catch (err) {
     return err;
@@ -31,18 +33,28 @@ export const submitOrder = async (data) => {
 
 export const submitCheckout = async (data) => {
   const body = new URLSearchParams();
+
   body.append('pay_currency', data.currency);
 
-  const response = await fetch(`${CORS.concat(ENDPOINT)}/${data.id}/checkout`, {
-    body,
-    method: 'POST',
-    headers: {
-      Authorization: `Token ${token}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  });
+  try {
+    const response = await fetch(
+      `${CORS.concat(ENDPOINT)}/${data.id}/checkout`,
+      {
+        body,
+        method: 'POST',
+        headers: {
+          Authorization: `Token ${token}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
 
-  if (response.status === 200) return response.json();
+    if (response.status === 200) return response.json();
+
+    throw new Error('Could not create new order');
+  } catch (err) {
+    return err;
+  }
 };
 
 export const getOrder = async (id) => {
@@ -54,22 +66,27 @@ export const getOrder = async (id) => {
         Authorization: `Token ${token}`,
       },
     });
+
     if (response.status === 200) return response.json();
+
     throw new Error('Could not get order information');
   } catch (err) {
-    console.log(err.message);
+    return err;
   }
 };
 
 export const getExchangeRates = async (currencies) => {
   let result = {};
   let tempResult = [];
+
   const response = await Promise.all(
     currencies.map((cur) =>
       fetch(`${CORS}https://api.coingate.com/v2/rates/merchant/EUR/${cur}`)
     )
   );
+
   tempResult = await Promise.all(response.map((r) => r.json()));
+
   tempResult.forEach((v, i) => {
     result[currencies[i]] = new Object({ rate: v });
   });

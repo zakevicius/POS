@@ -41,12 +41,20 @@ const PointOfSale = (props) => {
   }, [orderToShow]);
 
   const fetchOrder = async (id) => {
-    let orderData = await getOrder(id);
-    setOrderToShow(orderData);
+    try {
+      let orderData = await getOrder(id);
+
+      if (orderData instanceof Error) throw orderData;
+
+      setOrderToShow(orderData);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const onCellClick = (e, value) => {
     if (error) setError(null);
+
     click(e.target);
 
     if (value === 'C') {
@@ -56,7 +64,9 @@ const PointOfSale = (props) => {
 
     try {
       let newAmount = updateAmount(value);
+
       if (newAmount instanceof Error) throw newAmount;
+
       setAmount(newAmount);
     } catch (err) {
       setError(err.message);
@@ -69,11 +79,16 @@ const PointOfSale = (props) => {
       shake(amountDislpay.current);
     } else {
       if (error) setError();
+
       let order;
+
       setLoading(true);
+
       try {
         order = await submitOrder({ amount, currency: CURRENCY });
+
         setLoading(false);
+
         if (order instanceof Error) throw order;
         history.push({
           pathname: '/checkout',
@@ -95,7 +110,9 @@ const PointOfSale = (props) => {
     for (let i = 0; i < buttonValues.length / CELLS_PER_ROW; i++) {
       for (let j = 0; j < CELLS_PER_ROW; j++) {
         let value = buttonValues[i * CELLS_PER_ROW + j];
+
         if (value === undefined) break;
+
         cellData.push(
           <CellButton key={value} value={value} onCellClick={onCellClick} />
         );

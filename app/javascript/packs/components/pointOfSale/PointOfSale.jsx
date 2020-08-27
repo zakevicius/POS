@@ -39,7 +39,7 @@ const PointOfSale = (props) => {
     props.location.state
       ? fetchOrder(props.location.state.id)
       : setOrderToShow();
-  }, [orderToShow]);
+  }, [props.location.state]);
 
   const fetchOrder = async (id) => {
     try {
@@ -77,6 +77,9 @@ const PointOfSale = (props) => {
   const onSubmit = async () => {
     if (!amount || amount === 0) {
       setError('Enter amount');
+      shake(amountDislpay.current);
+    } else if (amount <= 0.1) {
+      setError('Amount must be bigger than 0.10 EUR');
       shake(amountDislpay.current);
     } else {
       if (error) setError();

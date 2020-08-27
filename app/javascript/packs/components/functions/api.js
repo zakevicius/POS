@@ -7,6 +7,7 @@ const CORS =
 const ENDPOINT = 'https://api-sandbox.coingate.com/v2/orders';
 
 export const submitOrder = async (data) => {
+  console.log('submitting order');
   const body = new URLSearchParams();
 
   body.append('price_amount', data.amount);
@@ -32,6 +33,7 @@ export const submitOrder = async (data) => {
 };
 
 export const submitCheckout = async (data) => {
+  console.log('submitting checkout');
   const body = new URLSearchParams();
 
   body.append('pay_currency', data.currency);
@@ -58,6 +60,7 @@ export const submitCheckout = async (data) => {
 };
 
 export const getOrder = async (id) => {
+  console.log('getting order');
   try {
     let response = await fetch(`${CORS.concat(ENDPOINT)}/${id}`, {
       method: 'GET',
@@ -76,6 +79,7 @@ export const getOrder = async (id) => {
 };
 
 export const getExchangeRates = async (currencies) => {
+  console.log('getting rates');
   let result = {};
   let tempResult = [];
 

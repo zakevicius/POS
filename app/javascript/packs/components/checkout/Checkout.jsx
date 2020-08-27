@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import Selection from './Selection';
-import { getExchangeRates } from '../functions/api';
-import { click } from '../functions/actions';
+import { getExchangeRates, submitCheckout } from '../functions/api';
+import { click, copy2dObject, shake } from '../functions/actions';
 
-// const Checkout = ({
-//   location: {
-//     state: { order = { id: 123, price_amount: 123, price_currency: 'EUR' } },
-//   },
-// }) => {
-const Checkout = ({
-  order = { id: 123, price_amount: 123, price_currency: 'EUR' },
-}) => {
+const Checkout = (props) => {
   const [rates, setRates] = useState({
     BTC: {
       name: 'Bitcoin',
@@ -28,40 +22,48 @@ const Checkout = ({
       short: 'BCH',
     },
   });
+  const currencyArr = Object.keys(rates);
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState();
+  const errorRef = useRef();
+  let history = useHistory();
+  let order = props.location.state ? props.location.state.order : { id: null };
 
   useEffect(() => {
-    // setLoading(true);
-    // setTimeout(() => {
-    setLoading(false);
-    // }, 1500);
-    // fetchRates();
+    if (!order.id) {
+      history.push('/');
+    } else {
+      setLoading(true);
+      fetchRates();
+    }
   }, [order.id, order.amount]);
 
   const fetchRates = async () => {
+    console.log('fetching');
     try {
-      let [BTCr, BCHr, LTCr] = await getExchangeRates();
+      let newRates = copy2dObject(rates);
+      let res = await getExchangeRates(currencyArr);
+
+      for (let curr in res) {
+        newRates = {
+          ...newRates,
+          [curr]: {
+            ...newRates[curr],
+            ...res[curr],
+          },
+        };
+      }
+
       setRates({
         ...rates,
-        BTC: {
-          ...rates.BTC,
-          rate: +BTCr,
-        },
-        LTC: {
-          ...rates.LTC,
-          rate: +LTCr,
-        },
-        BCH: {
-          ...rates.BCH,
-          rate: +BCHr,
-        },
+        ...newRates,
       });
       setLoading(false);
     } catch (err) {
       setLoading(false);
       setError('Could not get exchange rates. Please try again later');
+      console.log(err.message);
     }
   };
 
@@ -74,12 +76,36 @@ const Checkout = ({
     }, 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    click(e.target);
+    if (error) {
+      return shake(errorRef.current);
+    }
     if (!selected || e.target.classList.contains('disabled')) {
       setError('Select currency for payment');
     } else {
-      console.log(selected);
-      console.log('submitting ccheckout');
+      setLoading(true);
+      try {
+        let res = await submitCheckout({
+          id: order.id,
+          currency: selected,
+        });
+
+        setLoading(false);
+        if (res.status) {
+          history.push({
+            pathname: '/',
+            state: {
+              id: order.id,
+            },
+          });
+        } else {
+          setLoading(false);
+          throw new Error('Something went wrong...');
+        }
+      } catch (err) {
+        setError(err.message);
+      }
     }
   };
 
@@ -111,12 +137,12 @@ const Checkout = ({
         <h2>Select payment currency</h2>
         {loading ? <div id="loading">Loading</div> : renderSelections()}
       </div>
-      <div id="error" className={error ? 'active' : ''}>
+      <div id="error" className={error ? 'active' : ''} ref={errorRef}>
         {error}
       </div>
       <div className="buttons">
         <div
-          className={`btn btn-confirm ${selected ? '' : 'disabled'}`}
+          className={`btn btn-confirm ${selected && !error ? '' : 'disabled'}`}
           onClick={handleSubmit}
         >
           Pay {selected ? `with ${rates[selected].name}` : ''}

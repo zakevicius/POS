@@ -55,3 +55,20 @@ export const exchange = (amount, rate) => {
   let value = (rate * (amount * REALLY_BIG_NUMBER)) / REALLY_BIG_NUMBER;
   return value;
 };
+
+export const copy2dObject = (obj) => {
+  console.log(obj);
+  let newObj = {};
+
+  for (let key in obj) {
+    if (Object.keys(obj[key]).length > 0) {
+      for (let innerKey in obj[key]) {
+        newObj[key] = { ...newObj[key] };
+        newObj[key][innerKey] = obj[key][innerKey];
+      }
+    } else {
+      newObj[key] = obj[key];
+    }
+  }
+  return newObj;
+};

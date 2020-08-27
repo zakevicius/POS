@@ -1,16 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import CellButton from './CellButton';
 import Row from './Row';
+import Results from './Results';
 import { click, shake, updateAmount, reset } from '../functions/actions';
-import { submitOrder } from '../functions/api';
+import { submitOrder, getOrder } from '../functions/api';
 
-const PointOfSale = () => {
+const PointOfSale = (props) => {
   //History
   let history = useHistory();
   // State
   const [amount, setAmount] = useState();
   const [error, setError] = useState();
+  const [orderToShow, setOrderToShow] = useState();
   const [loading, setLoading] = useState(false);
   // Refs
   const amountDislpay = useRef();
@@ -31,6 +33,17 @@ const PointOfSale = () => {
     '0',
     'C',
   ];
+
+  useEffect(() => {
+    props.location.state
+      ? fetchOrder(props.location.state.id)
+      : setOrderToShow();
+  }, [orderToShow]);
+
+  const fetchOrder = async (id) => {
+    let orderData = await getOrder(id);
+    setOrderToShow(orderData);
+  };
 
   const onCellClick = (e, value) => {
     if (error) setError(null);
@@ -61,6 +74,7 @@ const PointOfSale = () => {
       try {
         order = await submitOrder({ amount, currency: CURRENCY });
         setLoading(false);
+        if (order instanceof Error) throw order;
         history.push({
           pathname: '/checkout',
           state: {
@@ -68,7 +82,8 @@ const PointOfSale = () => {
           },
         });
       } catch (err) {
-        console.log(err);
+        setLoading(false);
+        setError(err.message);
       }
     }
   };
@@ -94,38 +109,43 @@ const PointOfSale = () => {
   const renderLoading = () => <div className="bigLoading">LOADING...</div>;
 
   const renderPOS = () => (
-    <table>
-      <tbody>
-        <tr>
-          <td colSpan={CELLS_PER_ROW} id="title">
-            Simple
-          </td>
-        </tr>
-        <tr>
-          <td colSpan={CELLS_PER_ROW} id="value" ref={amountDislpay}>
-            {`${amount ? amount.toFixed(2) : `0.00`} ${CURRENCY}`}
-          </td>
-        </tr>
-        <tr id="error" className={error ? 'active' : ''}>
-          <td colSpan={CELLS_PER_ROW} id="errorMessage">
-            {error}
-          </td>
-        </tr>
+    <>
+      <div className="app">
+        <table>
+          <tbody>
+            <tr>
+              <td colSpan={CELLS_PER_ROW} id="title">
+                Simple
+              </td>
+            </tr>
+            <tr>
+              <td colSpan={CELLS_PER_ROW} id="value" ref={amountDislpay}>
+                {`${amount ? amount.toFixed(2) : `0.00`} ${CURRENCY}`}
+              </td>
+            </tr>
+            <tr id="error" className={error ? 'active' : ''}>
+              <td colSpan={CELLS_PER_ROW} id="errorMessage">
+                {error}
+              </td>
+            </tr>
 
-        {renderCellButtons()}
+            {renderCellButtons()}
 
-        <tr>
-          <td
-            colSpan={CELLS_PER_ROW}
-            id="submit"
-            className="btn btn-confirm"
-            onClick={onSubmit}
-          >
-            OK
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <tr>
+              <td
+                colSpan={CELLS_PER_ROW}
+                id="submit"
+                className="btn btn-confirm"
+                onClick={onSubmit}
+              >
+                OK
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {orderToShow ? <Results data={[orderToShow]} /> : null}
+    </>
   );
 
   return loading ? renderLoading() : renderPOS();

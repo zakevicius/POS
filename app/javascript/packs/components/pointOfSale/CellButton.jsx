@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-const CellButton = ({ value = "X", onCellClick }) => {
+const CellButton = ({ value = 'X', onCellClick }) => {
   return (
-    <td className='number' onClick={(e) => onCellClick(e, value)}>
+    <td className="number" onClick={(e) => onCellClick(e, value)}>
       {value}
     </td>
   );

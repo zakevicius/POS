@@ -35,6 +35,7 @@ const PointOfSale = (props) => {
   ];
 
   useEffect(() => {
+    reset();
     props.location.state
       ? fetchOrder(props.location.state.id)
       : setOrderToShow();

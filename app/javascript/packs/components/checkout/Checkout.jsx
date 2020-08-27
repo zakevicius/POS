@@ -40,7 +40,6 @@ const Checkout = (props) => {
   }, [order.id, order.amount]);
 
   const fetchRates = async () => {
-    console.log('fetching');
     try {
       let newRates = copy2dObject(rates);
       let res = await getExchangeRates(currencyArr);

@@ -1,4 +1,4 @@
-import { getExchangeRates } from './api';
+import exactMath from 'exact-math';
 
 const MAX_LIMIT = 100000;
 let amountArr = [];
@@ -27,7 +27,8 @@ export const updateAmount = (value) => {
 const getAmount = (arr) => {
   let amount = 0;
   for (let j = 0; j < arr.length; j++) {
-    amount += (arr[j] * Math.pow(10, arr.length - j - 1)) / 100;
+    let multiplyBy = exactMath.pow(10, arr.length - j - 1);
+    amount = exactMath.add(amount, exactMath.mul(arr[j], multiplyBy) / 100);
   }
   return parseFloat(amount.toFixed(2));
 };
@@ -51,13 +52,10 @@ export const click = (target) => {
 };
 
 export const exchange = (amount, rate) => {
-  const REALLY_BIG_NUMBER = 10000000000;
-  let value = (rate * (amount * REALLY_BIG_NUMBER)) / REALLY_BIG_NUMBER;
-  return value;
+  return exactMath.mul(rate, amount);
 };
 
 export const copy2dObject = (obj) => {
-  console.log(obj);
   let newObj = {};
 
   for (let key in obj) {

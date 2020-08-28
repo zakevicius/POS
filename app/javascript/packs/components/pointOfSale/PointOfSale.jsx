@@ -35,11 +35,12 @@ const PointOfSale = (props) => {
   ];
 
   useEffect(() => {
+    console.log(props);
     reset();
-    props.location.state
-      ? fetchOrder(props.location.state.id)
+    props.match.params.id
+      ? fetchOrder(props.match.params.id)
       : setOrderToShow();
-  }, [props.location.state]);
+  }, [props.match.params.id]);
 
   const fetchOrder = async (id) => {
     try {
@@ -89,7 +90,12 @@ const PointOfSale = (props) => {
       setLoading(true);
 
       try {
-        order = await submitOrder({ amount, currency: CURRENCY });
+        const random = Math.floor(Math.random() * 100000);
+        order = await submitOrder({
+          amount,
+          currency: CURRENCY,
+          order_id: random,
+        });
 
         setLoading(false);
 

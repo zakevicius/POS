@@ -8,6 +8,7 @@ const App = () => {
     <Router>
       <Switch>
         <Route path="/checkout" exact component={Checkout} />
+        <Route path="/:id" exact component={PointOfSale} />
         <Route path="/" exact component={PointOfSale} />
       </Switch>
     </Router>

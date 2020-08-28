@@ -95,13 +95,10 @@ const Checkout = (props) => {
 
         if (res instanceof Error) throw res;
 
-        if (res.status) {
-          history.push({
-            pathname: '/',
-            state: {
-              id: order.id,
-            },
-          });
+        if (res.payment_url) {
+          let a = document.createElement('A');
+          a.href = res.payment_url;
+          a.click();
         } else {
           setLoading(false);
           throw new Error('Something went wrong...');

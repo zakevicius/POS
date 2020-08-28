@@ -7,12 +7,14 @@ const CORS =
 const ENDPOINT = 'https://api-sandbox.coingate.com/v2/orders';
 
 export const submitOrder = async (data) => {
-  console.log('submitting order');
   const body = new URLSearchParams();
 
   body.append('price_amount', data.amount);
   body.append('price_currency', data.currency);
   body.append('receive_currency', 'EUR');
+  body.append('order_id', data.order_id);
+  body.append('cancel_url', `${window.location.origin}/${data.order_id}`);
+  body.append('success_url', `${window.location.origin}/${data.order_id}`);
 
   try {
     const response = await fetch(`${CORS.concat(ENDPOINT)}`, {
@@ -33,7 +35,6 @@ export const submitOrder = async (data) => {
 };
 
 export const submitCheckout = async (data) => {
-  console.log('submitting checkout');
   const body = new URLSearchParams();
 
   body.append('pay_currency', data.currency);
@@ -60,9 +61,8 @@ export const submitCheckout = async (data) => {
 };
 
 export const getOrder = async (id) => {
-  console.log('getting order');
   try {
-    let response = await fetch(`${CORS.concat(ENDPOINT)}/${id}`, {
+    let response = await fetch(`${CORS.concat(ENDPOINT)}`, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -70,7 +70,13 @@ export const getOrder = async (id) => {
       },
     });
 
-    if (response.status === 200) return response.json();
+    if (response.status === 200) {
+      let result = await response.json();
+
+      result = result.orders.filter((item) => item.order_id === id);
+
+      if (result.length) return result[0];
+    }
 
     throw new Error('Could not get order information');
   } catch (err) {
@@ -79,7 +85,6 @@ export const getOrder = async (id) => {
 };
 
 export const getExchangeRates = async (currencies) => {
-  console.log('getting rates');
   let result = {};
   let tempResult = [];
 

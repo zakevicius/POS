@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import Selection from './Selection';
+import Loading from '../elements/Loading';
 import { getExchangeRates, submitCheckout } from '../functions/api';
 import { click, copy2dObject, shake } from '../functions/actions';
 
@@ -76,6 +77,11 @@ const Checkout = (props) => {
     }, 1);
   };
 
+  const handleCancel = (e) => {
+    click(e.target);
+    history.push(`/${order.order_id}`);
+  };
+
   const handleSubmit = async (e) => {
     click(e.target);
     if (error) {
@@ -90,8 +96,6 @@ const Checkout = (props) => {
           id: order.id,
           currency: selected,
         });
-
-        setLoading(false);
 
         if (res instanceof Error) throw res;
 
@@ -135,7 +139,7 @@ const Checkout = (props) => {
       </div>
       <div className="currency">
         <h2>Select payment currency</h2>
-        {loading ? <div id="loading">Loading</div> : renderSelections()}
+        {loading ? <Loading /> : renderSelections()}
       </div>
       <div id="error" className={error ? 'active' : ''} ref={errorRef}>
         {error}
@@ -147,7 +151,9 @@ const Checkout = (props) => {
         >
           Pay {selected ? `with ${rates[selected].name}` : ''}
         </div>
-        <div className="btn btn-cancel">Cancel</div>
+        <div className="btn btn-cancel" onClick={handleCancel}>
+          Cancel
+        </div>
       </div>
     </div>
   );

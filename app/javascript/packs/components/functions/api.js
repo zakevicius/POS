@@ -73,9 +73,9 @@ export const getOrder = async (id) => {
     if (response.status === 200) {
       let result = await response.json();
 
-      result = result.orders.filter((item) => item.order_id === id);
+      result = result.orders.find((item) => item.order_id === id);
 
-      if (result.length) return result[0];
+      if (result) return result;
     }
 
     throw new Error('Could not get order information');

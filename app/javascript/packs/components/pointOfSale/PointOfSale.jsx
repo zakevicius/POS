@@ -3,8 +3,15 @@ import { useHistory } from 'react-router-dom';
 import CellButton from './CellButton';
 import Row from './Row';
 import Results from './Results';
-import { click, shake, updateAmount, reset } from '../functions/actions';
+import Loading from '../elements/Loading';
 import { submitOrder, getOrder } from '../functions/api';
+import {
+  click,
+  shake,
+  updateAmount,
+  reset,
+  makeID,
+} from '../functions/actions';
 
 const PointOfSale = (props) => {
   //History
@@ -35,7 +42,6 @@ const PointOfSale = (props) => {
   ];
 
   useEffect(() => {
-    console.log(props);
     reset();
     props.match.params.id
       ? fetchOrder(props.match.params.id)
@@ -90,11 +96,11 @@ const PointOfSale = (props) => {
       setLoading(true);
 
       try {
-        const random = Math.floor(Math.random() * 100000);
+        const order_id = `Simple-${makeID(8)}`;
         order = await submitOrder({
           amount,
           currency: CURRENCY,
-          order_id: random,
+          order_id,
         });
 
         setLoading(false);
@@ -133,9 +139,7 @@ const PointOfSale = (props) => {
     return rows;
   };
 
-  const renderLoading = () => <div className="bigLoading">LOADING...</div>;
-
-  const renderPOS = () => (
+  return (
     <>
       <div className="app">
         <table>
@@ -159,14 +163,20 @@ const PointOfSale = (props) => {
             {renderCellButtons()}
 
             <tr>
-              <td
-                colSpan={CELLS_PER_ROW}
-                id="submit"
-                className="btn btn-confirm"
-                onClick={onSubmit}
-              >
-                OK
-              </td>
+              {loading ? (
+                <td colSpan={CELLS_PER_ROW}>
+                  <Loading />
+                </td>
+              ) : (
+                <td
+                  colSpan={CELLS_PER_ROW}
+                  id="submit"
+                  className="btn btn-confirm"
+                  onClick={onSubmit}
+                >
+                  OK
+                </td>
+              )}
             </tr>
           </tbody>
         </table>
@@ -174,8 +184,6 @@ const PointOfSale = (props) => {
       {orderToShow ? <Results data={[orderToShow]} /> : null}
     </>
   );
-
-  return loading ? renderLoading() : renderPOS();
 };
 
 export default PointOfSale;

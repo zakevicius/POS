@@ -1,9 +1,11 @@
 import { token } from './token.json';
 
-const CORS =
-  window.location.hostname === 'localhost'
-    ? 'https://cors-anywhere.herokuapp.com/'
-    : '';
+// const CORS =
+//   window.location.hostname === 'localhost'
+//     ? 'https://cors-anywhere.herokuapp.com/'
+//     : '';
+
+const CORS = 'https://cors-anywhere.herokuapp.com/';
 const ENDPOINT = 'https://api-sandbox.coingate.com/v2/orders';
 
 export const submitOrder = async (data) => {
